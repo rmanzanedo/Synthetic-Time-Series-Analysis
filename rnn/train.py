@@ -2,7 +2,7 @@ import os
 import torch
 from torch.autograd import Variable
 import pandas as pd
-
+from sklearn.model_selection import train_test_split
 import parser
 import models
 import data
@@ -28,9 +28,11 @@ def evaluate(model, data_loader):
     gts = []
     with torch.no_grad():  # do not need to caculate information for gradient during eval
         for idx, (imgs, gt) in enumerate(data_loader):
+            imgs = imgs.double().reshape(1, imgs.shape[0], 253)
 
             pred,_ = model(imgs.cuda())
             _, pred = torch.max(pred, dim=1)
+
 
             pred = np.array(pred.cpu().numpy())
             gt = gt.numpy()
@@ -62,7 +64,7 @@ if __name__ == '__main__':
 
     ''' load dataset and prepare data loader '''
     print('===> prepare dataloader ...')
-    df1 = pd.read_csv('../MyriadChallenge/TrainMyriad.csv')
+    df1 = pd.read_csv('../MyriadChallenge/TrainMyriad.csv').astype('float64')
     x_tr = df1.drop(columns=['Class'])
     y_tr = df1['Class']
     X_train, X_test, y_train, y_test = train_test_split(x_tr, y_tr, random_state=1)
@@ -79,13 +81,15 @@ if __name__ == '__main__':
     ''' load model '''
     print('===> prepare model ...')
 
-    model = models.rnn()
+    model = models.rnn().double()
+
 
 
     model.cuda()  # load model to gpu
 
     ''' define loss '''
-    criterion = nn.CrossEntropyLoss()
+    #criterion = nn.CrossEntropyLoss()
+    criterion = nn.NLLLoss()
 
     ''' setup optimizer '''
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -104,16 +108,18 @@ if __name__ == '__main__':
 
         for idx, (imgs, cls) in enumerate(train_loader):
 
-            train_info = 'Epoch: [{0}][{1}/{2}]'.format(epoch, (int(idx/args.train_batch) + 1), round(len(train_loader)/args.train_batch))
+            train_info = 'Epoch: [{0}][{1}/{2}]'.format(epoch, (int(idx) + 1), round(len(train_loader)))
             iters += 1
             ''' move data to gpu '''
-
+            #print(imgs.shape[0])
+            imgs=imgs.double().reshape(1, imgs.shape[0],253)
+            #print(imgs.shape,len(train_loader))
             # x, labels = input_rnn(imgs, cls)
 
-            output,_ = model(imgs.cuda())
+            output,_ = model(imgs.double().cuda())
 
             ''' compute loss, backpropagation, update parameters '''
-            loss = criterion(output, cls.cuda()) # compute loss
+            loss = criterion(output, cls.long().cuda()) # compute loss
 
             optimizer.zero_grad()  # set grad of all parameters to zero
             loss.backward()  # compute gradient for each parameters
@@ -123,7 +129,7 @@ if __name__ == '__main__':
 
             train_info += ' loss: {:.4f}'.format(loss.data.cpu().numpy())
 
-            print('\r',train_info, end='' )
+            print('\r', train_info, end='' )
 
         if epoch % args.val_epoch == 0:
             ''' evaluate the model '''
