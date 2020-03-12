@@ -8,10 +8,7 @@ import data_test as data
 import csv
 
 import numpy as np
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from sklearn.metrics import accuracy_score
+import pandas as pd
 
 
 
@@ -85,8 +82,9 @@ if __name__ == '__main__':
     preds = np.concatenate(preds)
     with open(args.save_csv, 'w', newline='') as myfile:
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        wr.writerow('class')
-        wr.writerow(preds)
+        wr.writerow(['class'])
+        for i in preds:
+            wr.writerow([str(i)])
 
     # result = accuracy_score(gts, preds)
     # print('ACC : {}'.format(result))
