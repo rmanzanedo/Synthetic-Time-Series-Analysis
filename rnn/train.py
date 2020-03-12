@@ -12,7 +12,8 @@ import numpy as np
 import torch.nn as nn
 
 import torch.optim as optim
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, roc_auc_score
+
 
 
 def save_model(model, save_path):
@@ -31,10 +32,10 @@ def evaluate(model, data_loader):
             imgs = imgs.double().reshape(1, imgs.shape[0], 253)
 
             pred,_ = model(imgs.cuda())
-            _, pred = torch.max(pred, dim=1)
-
-
-            pred = np.array(pred.cpu().numpy())
+            # _, pred = torch.max(pred, dim=1)
+            #
+            # pred = np.array(pred.cpu().numpy())
+            pred = pred.cpu().numpy()[:, 1]
             gt = gt.numpy()
 
             preds.append(pred)
@@ -43,8 +44,8 @@ def evaluate(model, data_loader):
     gts = np.concatenate(gts)
     preds = np.concatenate(preds)
 
-    return accuracy_score(gts, preds)
-
+    # return accuracy_score(gts, preds)
+    return roc_auc_score(gts, preds)
 
 if __name__ == '__main__':
 
@@ -64,7 +65,7 @@ if __name__ == '__main__':
 
     ''' load dataset and prepare data loader '''
     print('===> prepare dataloader ...')
-    df1 = pd.read_csv('../MyriadChallenge/TrainMyriad.csv').astype('float64')
+    df1 = pd.read_csv(args.data_dir).astype('float64')
     x_tr = df1.drop(columns=['Class'])
     y_tr = df1['Class']
     X_train, X_test, y_train, y_test = train_test_split(x_tr, y_tr, random_state=1)
@@ -143,4 +144,4 @@ if __name__ == '__main__':
                 best_acc = acc
 
         ''' save model '''
-        save_model(model, os.path.join(args.save_dir, 'model_{}.pth.tar'.format(epoch)))
+        #save_model(model, os.path.join(args.save_dir, 'model_{}.pth.tar'.format(epoch)))

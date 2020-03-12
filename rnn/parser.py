@@ -3,10 +3,10 @@ import argparse
 
 
 def arg_parse():
-    parser = argparse.ArgumentParser(description='DLCV TA\'s tutorial in image classification using pytorch')
+    parser = argparse.ArgumentParser(description='Myriad Challenge')
 
     # Datasets parameters
-    parser.add_argument('--data_dir', type=str, default='../hw4_data/TrimmedVideos',
+    parser.add_argument('--data_dir', type=str, default='../MyriadChallenge/TrainMyriad.csv',
                         help="root path to data directory")
     parser.add_argument('--workers', default=4, type=int,
                         help="number of data loading workers (default: 4)")
@@ -34,9 +34,11 @@ def arg_parse():
     parser.add_argument('--save_dir', type=str, default='log')
     parser.add_argument('--random_seed', type=int, default=999)
 
+    parser.add_argument('--load_model', type=str, default='log/model_best.pth.tar')
 
 
-    parser.add_argument('--save_txt', default='./', type=str,
+
+    parser.add_argument('--save_csv', default='./result.csv', type=str,
                         help="output file")
 
     args = parser.parse_args()
