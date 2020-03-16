@@ -95,7 +95,7 @@ if __name__ == '__main__':
     ''' setup optimizer '''
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-    ''' setup tensorboard '''
+
 
 
     ''' train model '''
@@ -112,10 +112,9 @@ if __name__ == '__main__':
             train_info = 'Epoch: [{0}][{1}/{2}]'.format(epoch, (int(idx) + 1), round(len(train_loader)))
             iters += 1
             ''' move data to gpu '''
-            #print(imgs.shape[0])
+
             imgs=imgs.double().reshape(1, imgs.shape[0],253)
-            #print(imgs.shape,len(train_loader))
-            # x, labels = input_rnn(imgs, cls)
+
 
             output,_ = model(imgs.double().cuda())
 
@@ -126,7 +125,7 @@ if __name__ == '__main__':
             loss.backward()  # compute gradient for each parameters
             optimizer.step()  # update parameters
 
-            ''' write out information to tensorboard '''
+
 
             train_info += ' loss: {:.4f}'.format(loss.data.cpu().numpy())
 

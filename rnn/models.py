@@ -14,8 +14,7 @@ class rnn(nn.Module):
         )
 
     def forward(self, x):
-        #print(x.shape, type(x.double()))
-        hidden = (torch.randn(2, 32, 5).double(), torch.randn(2, 32, 5).double())
+        
         out, (hn, cn) = self.rnn(x.double(), None)
         out = self.fc(hn[-1])
 

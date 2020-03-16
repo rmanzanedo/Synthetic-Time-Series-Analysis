@@ -27,9 +27,7 @@ def arg_parse():
     parser.add_argument('--weight-decay', default=0.0005, type=float,
                         help="initial learning rate")
 
-    # resume trained model
-    parser.add_argument('--resume', type=str, default='',
-                        help="path to the trained model")
+
     # others
     parser.add_argument('--save_dir', type=str, default='log')
     parser.add_argument('--random_seed', type=int, default=999)
