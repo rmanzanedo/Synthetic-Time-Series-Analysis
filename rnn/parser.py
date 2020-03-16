@@ -22,7 +22,7 @@ def arg_parse():
                         help="train batch size")
     parser.add_argument('--test_batch', default=32, type=int,
                         help="test batch size")
-    parser.add_argument('--lr', default=0.0001, type=float,
+    parser.add_argument('--lr', default=0.002, type=float,
                         help="initial learning rate")
     parser.add_argument('--weight-decay', default=0.0005, type=float,
                         help="initial learning rate")
