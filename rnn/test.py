@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     ''' load dataset and prepare data loader '''
     print('===> prepare dataloader ...')
-    X_test = pd.read_csv('../MyriadChallenge/TestMyriad.csv').astype('float64')
+    X_test = pd.read_csv(args.data_dir_test).astype('float64')
     val_loader = torch.utils.data.DataLoader(data.DATA(X_test),
                                              batch_size=args.train_batch,
                                              num_workers=args.workers,

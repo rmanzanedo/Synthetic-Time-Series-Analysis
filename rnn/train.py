@@ -102,7 +102,7 @@ if __name__ == '__main__':
     print('===> start training ...')
     iters = 0
     best_acc = 0
-    # tensor = torch.ones((2,), dtype=torch.long)
+    
 
     for epoch in range(1, args.epoch + 1):
         model.train()

@@ -8,6 +8,8 @@ def arg_parse():
     # Datasets parameters
     parser.add_argument('--data_dir', type=str, default='../MyriadChallenge/TrainMyriad.csv',
                         help="root path to data directory")
+    parser.add_argument('--data_dir_test', type=str, default='../MyriadChallenge/TestMyriad.csv',
+                        help="root path to data directory")
     parser.add_argument('--workers', default=4, type=int,
                         help="number of data loading workers (default: 4)")
 
@@ -33,8 +35,6 @@ def arg_parse():
     parser.add_argument('--random_seed', type=int, default=999)
 
     parser.add_argument('--load_model', type=str, default='log/model_best.pth.tar')
-
-
 
     parser.add_argument('--save_csv', default='./result.csv', type=str,
                         help="output file")
