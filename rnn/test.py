@@ -67,3 +67,4 @@ if __name__ == '__main__':
         wr.writerow(['class'])
         for i in preds:
             wr.writerow([str(i)])
+    print('file created')
